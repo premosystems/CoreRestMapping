@@ -1,0 +1,6 @@
+framework module Pods_CoreRestMapping_Example {
+  umbrella header "Pods-CoreRestMapping_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,20 @@
+PODS:
+  - CoreRestMapping (0.1.0)
+  - Expecta (1.0.3)
+  - Specta (1.0.4)
+
+DEPENDENCIES:
+  - CoreRestMapping (from `../`)
+  - Expecta
+  - Specta
+
+EXTERNAL SOURCES:
+  CoreRestMapping:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  CoreRestMapping: 3944cca38d7f104b8978ae5d13625e1298d560d7
+  Expecta: 9d1bff6c8b0eeee73a166a2ee898892478927a15
+  Specta: 69bb134672aae190a1379ff91df07dad8dd1f869
+
+COCOAPODS: 0.38.2

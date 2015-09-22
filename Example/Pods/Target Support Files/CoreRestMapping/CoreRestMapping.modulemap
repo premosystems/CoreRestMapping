@@ -1,0 +1,6 @@
+framework module CoreRestMapping {
+  umbrella header "CoreRestMapping-umbrella.h"
+
+  export *
+  module * { export * }
+}
