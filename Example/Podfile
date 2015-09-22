@@ -1,0 +1,13 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'CoreRestMapping_Example', :exclusive => true do
+  pod "CoreRestMapping", :path => "../"
+end
+
+target 'CoreRestMapping_Tests', :exclusive => true do
+  pod "CoreRestMapping", :path => "../"
+
+  pod 'Specta'
+  pod 'Expecta'
+end
