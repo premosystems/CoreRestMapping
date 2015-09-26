@@ -2,19 +2,18 @@
 //  CoreRestMapping.h
 //  Pods
 //
-//  Created by Vincil Bishop on 9/22/15.
+//  Created by Vincil Bishop on 6/24/15.
 //
 //
 
-#ifndef CoreRestMapping_h
-#define CoreRestMapping_h
+#ifndef Pods_CoreRestMapping_h
+#define Pods_CoreRestMapping_h
 
 
-#endif /* CoreRestMapping_h */
+#endif
 
-#import <CoreData/CoreData.h>
-
-#import "CRMManager.h"
-
-#import "NSManagedObject+CRMRestAdditions.h"
-#import "NSManagedObject+CRMMappingAdditions.h"
+#import "CoreRestMapping-Defines.h"
+#import "CoreRestMapping-Errors.h"
+#import "CRRestfulObject.h"
+#import "NSManagedObject+CRMappingAdditions.h"
+#import "NSManagedObject+CRRestAdditions.h"
