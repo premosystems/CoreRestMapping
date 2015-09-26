@@ -89,7 +89,13 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
     [[NSManagedObject CR_HTTPSessionManager] POST:path parameters:entityRepresentation success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
         
         if ([self CR_rootResponseElement] && [responseObject isKindOfClass:[NSDictionary class]]) {
-            responseObject = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
+			
+			NSDictionary *responseDictionary = (NSDictionary*)responseObject;
+			
+			if (responseDictionary[[self CR_rootResponseElement]]) {
+			
+				responseObject = responseDictionary[[self CR_rootResponseElement]];
+			}
         }
         
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
