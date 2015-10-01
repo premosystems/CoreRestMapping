@@ -12,6 +12,8 @@
 static NSString *_defaultPrimaryKeyProperty;
 static NSString *_defaultPrimaryKeyPath;
 
+static NSDateFormatter *_defaultDateFormatter;
+
 @implementation NSManagedObject (CRMappingAdditions)
 
 + (EKManagedObjectMapping*) objectMapping {
@@ -23,6 +25,26 @@ static NSString *_defaultPrimaryKeyPath;
         // TODO: Make this conditionally set a primary key based on userInfo from the managed object model
         
     }];
+}
+
++ (NSDateFormatter*) CR_dateFormatter
+{
+	if (!_defaultDateFormatter) {
+		// ISO 8601 Date
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		NSLocale *enUSPOSIXLocale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+		[dateFormatter setLocale:enUSPOSIXLocale];
+		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
+
+		_defaultDateFormatter = dateFormatter;
+	}
+	
+	return _defaultDateFormatter;
+}
+
++ (void) CR_setDefaultDateFormatter:(NSDateFormatter*)dateFormatter
+{
+	_defaultDateFormatter = dateFormatter;
 }
 
 + (void) CR_setPrimaryKeyProperty:(NSString*)keyProperty

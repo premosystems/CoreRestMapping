@@ -12,6 +12,22 @@
 @protocol CRMappableObject <NSObject,EKManagedMappingProtocol>
 
 /**
+ *  The default date formatter used to transalte from JSON dates to NSDate. If not set, then defaults to ISO8601 "yyyy-MM-dd'T'HH:mm:ssZZZZZ".
+ *
+ * @discussion Callers should override this method for exception cases on a per class basis.
+ *
+ *  @return An instantiated date formatter.
+ */
++ (NSDateFormatter*) CR_dateFormatter;
+
+/**
+ *  Sets the default date formatter.
+ *
+ *  @param dateFormatter An instantiated date formatter.
+ */
++ (void) CR_setDefaultDateFormatter:(NSDateFormatter*)dateFormatter;
+
+/**
  *  Set the default primary key property for objects globally.
  *
  *  @param keyProperty The primary key property as is set in the CoreData model editor.
