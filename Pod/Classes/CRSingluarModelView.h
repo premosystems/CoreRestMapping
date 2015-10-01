@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @protocol CRRestfulObject;
+@protocol CRMappableObject;
 
 @protocol CRSingluarModelView <NSObject>
 
 @property (nonatomic,strong) id<CRRestfulObject> modelObject;
 
-- (void) CR_updateWithModelObject:(id<CRRestfulObject>)modelObject;
+- (void) CR_updateWithModelObject:(id<CRRestfulObject,CRMappableObject>)modelObject;
 
 @end
