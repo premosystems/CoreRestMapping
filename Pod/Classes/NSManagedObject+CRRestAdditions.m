@@ -365,7 +365,11 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
     [[NSManagedObject CR_HTTPSessionManager] GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
         if ([self CR_rootResponseElement] && [responseObject isKindOfClass:[NSDictionary class]]) {
-            responseObject = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
+            NSDictionary *maybeResult = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
+			
+			if (maybeResult) {
+				responseObject = maybeResult;
+			}
         }
         
         if ([responseObject isKindOfClass:[NSArray class]]) {
@@ -414,7 +418,12 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
     [[NSManagedObject CR_HTTPSessionManager] GET:path parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
         
         if ([self CR_rootResponseElement] && [responseObject isKindOfClass:[NSDictionary class]]) {
-            responseObject = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
+            NSDictionary *maybeResult = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
+			
+			if (maybeResult) {
+				responseObject = maybeResult;
+			}
+			
         }
         
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
