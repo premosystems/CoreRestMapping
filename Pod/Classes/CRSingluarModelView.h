@@ -13,8 +13,8 @@
 
 @protocol CRSingluarModelView <NSObject>
 
-@property (nonatomic,strong) id<CRRestfulObject> modelObject;
+@property (nonatomic,strong) id CR_modelObject;
 
-- (void) CR_updateWithModelObject:(id<CRRestfulObject,CRMappableObject>)modelObject;
+- (void) CR_updateWithModelObject:(id)modelObject;
 
 @end

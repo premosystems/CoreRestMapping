@@ -16,13 +16,13 @@
 /**
  *  An array of model objects conforming to the CRRestfulObject protocol.
  */
-@property (nonatomic,strong) NSArray<id<CRRestfulObject,CRMappableObject>> *CR_modelObjects;
+@property (nonatomic,strong) NSArray* CR_modelObjects;
 
 /**
  *  Updated the model objects and view.
  *
  *  @param modelObjects The model objects to update.
  */
-- (void) CR_updateWithModelObjects:(NSArray<id<CRRestfulObject,CRMappableObject>>*)modelObjects;
+- (void) CR_updateWithModelObjects:(NSArray*)modelObjects;
 
 @end
