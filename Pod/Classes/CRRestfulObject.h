@@ -151,4 +151,6 @@
  */
 + (void) CR_updateRemoteEntity:(NSManagedObject*)entity atPath:(NSString*)path completion:(CRRestCompletionBlock)completion;
 
++ (void) CR_updateRemoteEntity:(NSManagedObject*)entity atPath:(NSString*)path withID:(id)uniqueID withParameters:(NSDictionary*)parameters completion:(CRRestCompletionBlock)completion;
+
 @end

@@ -453,33 +453,43 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 + (void) CR_updateRemoteEntity:(NSManagedObject*)entity atPath:(NSString*)path completion:(CRRestCompletionBlock)completion
 {
     NSString *uniqueID = [entity CR_primaryKeyPropertyValue];
-    NSString *urlString = [NSString stringWithFormat:@"%@%@/%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path,uniqueID];
-    
-    [[NSManagedObject CR_HTTPSessionManager] PUT:urlString parameters:[entity CR_dictionaryRepresentation] success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
-        
-        if ([responseObject isKindOfClass:[NSDictionary class]]) {
-            id entity = [self CR_serializeAndSaveOneEntity:responseObject];
-            
-            if (completion) {
-                completion(self,YES,nil,entity);
-            }
-        } else {
-            if (completion) {
-                
-                NSError *error = [NSError errorWithDomain:kCRRestErrorDomain_UnexpectedType code:kCRRestErrorCode_UnexpectedType userInfo:@{NSLocalizedFailureReasonErrorKey:responseObject}];
-                
-                completion(self,NO,error,nil);
-            }
-        }
-        
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        [self logError:error request:entity path:[self CR_RESTPath] object:task method:@"PUT"];
-        
-        if (completion) {
-            completion(self,NO,error,nil);
-        }
-    }];
+	[self CR_updateRemoteEntity:entity atPath:path withID:uniqueID withParameters:[entity CR_dictionaryRepresentation] completion:completion];
 }
+
++ (void) CR_updateRemoteEntity:(NSManagedObject*)entity atPath:(NSString*)path withID:(id)uniqueID withParameters:(NSDictionary*)parameters completion:(CRRestCompletionBlock)completion
+{
+	NSString *urlString = [NSString stringWithFormat:@"%@%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path];
+	
+	if (uniqueID) {
+		urlString = [NSString stringWithFormat:@"%@%@/%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path,uniqueID];
+	}
+
+	[[NSManagedObject CR_HTTPSessionManager] PUT:urlString parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+		
+		if ([responseObject isKindOfClass:[NSDictionary class]]) {
+			id entity = [self CR_serializeAndSaveOneEntity:responseObject];
+			
+			if (completion) {
+				completion(self,YES,nil,entity);
+			}
+		} else {
+			if (completion) {
+				
+				NSError *error = [NSError errorWithDomain:kCRRestErrorDomain_UnexpectedType code:kCRRestErrorCode_UnexpectedType userInfo:@{NSLocalizedFailureReasonErrorKey:responseObject}];
+				
+				completion(self,NO,error,nil);
+			}
+		}
+		
+	} failure:^(NSURLSessionDataTask *task, NSError *error) {
+		[self logError:error request:entity path:[self CR_RESTPath] object:task method:@"PUT"];
+		
+		if (completion) {
+			completion(self,NO,error,nil);
+		}
+	}];
+}
+
 
 + (void) logError:(NSError*)error request:(id)request path:(NSString*)path object:(id)object method:(NSString*)method
 {
