@@ -97,8 +97,8 @@ static NSDateFormatter *_defaultDateFormatter;
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:NSStringFromClass(self) inManagedObjectContext:context]];
-    
-    entities = [EKManagedObjectMapper syncArrayOfObjectsFromExternalRepresentation:arrayOfRepresentations withMapping:[[self class] objectMapping] fetchRequest:request inManagedObjectContext:context];
+	
+	entities = [EKManagedObjectMapper arrayOfObjectsFromExternalRepresentation:arrayOfRepresentations withMapping:[[self class] objectMapping]  inManagedObjectContext:context];
     
     return entities;
     
