@@ -86,7 +86,7 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 + (void) CR_createRemoteEntity:(NSDictionary*)entityRepresentation atPath:(NSString*)path completion:(CRRestCompletionBlock)completion {
     //NSString *urlString = [NSString stringWithFormat:@"%@%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],[self RESTPath]];
     
-    [[NSManagedObject CR_HTTPSessionManager] POST:path parameters:entityRepresentation success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
+    [[NSManagedObject CR_HTTPSessionManager] POST:path parameters:entityRepresentation success:^(NSURLSessionDataTask *task, id responseObject) {
         
         if ([self CR_rootResponseElement] && [responseObject isKindOfClass:[NSDictionary class]]) {
 			
@@ -99,12 +99,23 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
         }
         
         if ([responseObject isKindOfClass:[NSDictionary class]]) {
+			
             id entity = [self CR_serializeAndSaveOneEntity:responseObject];
             
             if (completion) {
                 completion(self,YES,nil,entity);
             }
-        } else {
+			
+		} else if ([responseObject isKindOfClass:[NSArray class]]) {
+			
+			NSArray *entities = [self CR_serializeAndSaveManyEntities:responseObject];
+			
+			if (completion) {
+				completion(self,YES,nil,entities);
+			}
+		
+		} else {
+			
             if (completion) {
                 
                 NSError *error = [NSError errorWithDomain:kCRRestErrorDomain_UnexpectedType code:kCRRestErrorCode_UnexpectedType userInfo:@{NSLocalizedFailureReasonErrorKey:responseObject}];

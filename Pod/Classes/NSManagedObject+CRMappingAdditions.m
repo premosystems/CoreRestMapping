@@ -79,13 +79,13 @@ static NSDateFormatter *_defaultDateFormatter;
 
 + (NSString*) CR_deletedNotificationName
 {
-    NSString *notificationNameString = [NSString stringWithFormat:@"%@_DELETED",NSStringFromClass(self)];
+    NSString *notificationNameString = [NSString stringWithFormat:@"CR_%@_DELETED_NOTIFICATION",NSStringFromClass(self)];
     return notificationNameString;
 }
 
 + (NSString*) CR_savedNotificationName
 {
-    NSString *notificationNameString = [NSString stringWithFormat:@"%@_SAVED",NSStringFromClass(self)];
+    NSString *notificationNameString = [NSString stringWithFormat:@"CR_%@_SAVED_NOTIFICATION",NSStringFromClass(self)];
     return notificationNameString;
 }
 
