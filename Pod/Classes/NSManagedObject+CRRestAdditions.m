@@ -154,7 +154,7 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
         __block NSMutableArray *errors = [NSMutableArray new];
         __block NSError *requestError = nil;
         [requestDictionaries enumerateObjectsUsingBlock:^(NSDictionary *requestDictionary, NSUInteger idx, BOOL *stop) {
-            NSMutableURLRequest *request = [[NSManagedObject CR_HTTPSessionManager].requestSerializer requestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@/%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path] parameters:requestDictionary error:&requestError];
+            NSMutableURLRequest *request = [[NSManagedObject CR_HTTPSessionManager].requestSerializer requestWithMethod:@"POST" URLString:[NSString stringWithFormat:@"%@%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path] parameters:requestDictionary error:&requestError];
             
             AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
             operation.responseSerializer = [[NSManagedObject CR_HTTPSessionManager] responseSerializer];
@@ -216,7 +216,7 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 
 + (void) CR_deleteRemoteEntity:(NSManagedObject*)entity completion:(CRRestCompletionBlock)completion {
     
-    NSString *urlString = [NSString stringWithFormat:@"%@%@/%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],[self CR_RESTPath],[entity CR_primaryKeyPropertyValue]];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],[self CR_RESTPath],[entity CR_primaryKeyPropertyValue]];
     
     NSArray *entityDicts = nil;
     if (entity) {
@@ -413,11 +413,11 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
     
     if (identifier) {
         
-        urlString = [NSString stringWithFormat:@"/%@/%@",path,identifier];
+        urlString = [NSString stringWithFormat:@"%@/%@",path,identifier];
         
     } else {
         
-        urlString = [NSString stringWithFormat:@"/%@",path];
+        urlString = [NSString stringWithFormat:@"%@",path];
     }
     
     [self CR_getRemoteEntityAtPath:urlString parameters:params completion:completion];
@@ -472,7 +472,7 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 	NSString *urlString = [NSString stringWithFormat:@"%@%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path];
 	
 	if (uniqueID) {
-		urlString = [NSString stringWithFormat:@"%@%@/%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path,uniqueID];
+		urlString = [NSString stringWithFormat:@"%@%@%@",[[NSManagedObject CR_HTTPSessionManager].baseURL absoluteString],path,uniqueID];
 	}
 
 	[[NSManagedObject CR_HTTPSessionManager] PUT:urlString parameters:parameters success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
