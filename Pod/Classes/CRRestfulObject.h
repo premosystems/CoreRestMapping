@@ -126,9 +126,10 @@
  *
  *  @param path                The path to GET the entities from.
  *  @param params              Parameters to send along with the request.
+  *  @param rootResponseElement              The root element from which to extract the response or nil.
  *  @param completion          A completion block to be run when the transaction completes.
  */
-+ (void) CR_getRemoteEntitiesAtPath:(NSString*)path parameters:(NSDictionary*)params completion:(CRRestCompletionBlock)completion;
++ (void) CR_getRemoteEntitiesAtPath:(NSString*)path parameters:(NSDictionary*)params rootResponseElement:(NSString*)rootElement completion:(CRRestCompletionBlock)completion;
 
 /**
  *  Gets a single entity at a specific path, then serializes the response to CoreData.
@@ -136,11 +137,12 @@
  *  @param path       The path to GET the entity from.
  *  @param identifier The identifier (_id) of the entity to GET.
  *  @param params              Parameters to send along with the request.
+ *  @param rootResponseElement              The root element from which to extract the response or nil.
  *  @param completion          A completion block to be run when the transaction completes.
  */
 + (void) CR_getRemoteEntityAtPath:(NSString*)path withID:(NSString*)identifier parameters:(NSDictionary*)params completion:(CRRestCompletionBlock)completion;
 
-+ (void) CR_getRemoteEntityAtPath:(NSString*)path parameters:(NSDictionary*)params completion:(CRRestCompletionBlock)completion;
++ (void) CR_getRemoteEntityAtPath:(NSString*)path parameters:(NSDictionary*)params rootResponseElement:(NSString*)rootElement completion:(CRRestCompletionBlock)completion;
 
 /**
  *  Updates the supplied entity at a specific path.

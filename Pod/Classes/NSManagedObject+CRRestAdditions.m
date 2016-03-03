@@ -53,7 +53,7 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 
 + (void) CR_getRemoteEntitiesWithCompletion:(CRRestCompletionBlock)completion
 {
-    [self CR_getRemoteEntitiesAtPath:[self CR_RESTPath] parameters:nil completion:completion];
+    [self CR_getRemoteEntitiesAtPath:[self CR_RESTPath] parameters:nil rootResponseElement:[self CR_rootResponseElement] completion:completion];
 }
 
 + (void) CR_getRemoteEntityWithID:(NSString*)identifier withCompletion:(CRRestCompletionBlock)completion
@@ -371,10 +371,11 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 }
 
 
-+ (void) CR_getRemoteEntitiesAtPath:(NSString*)path parameters:(NSDictionary*)params completion:(CRRestCompletionBlock)completion
++ (void) CR_getRemoteEntitiesAtPath:(NSString*)path parameters:(NSDictionary*)params rootResponseElement:(NSString*)rootElement completion:(CRRestCompletionBlock)completion
 {
     [[NSManagedObject CR_HTTPSessionManager] GET:path parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
+        /*
         if ([self CR_rootResponseElement] && [responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *maybeResult = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
 			
@@ -382,10 +383,12 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 				responseObject = maybeResult;
 			}
         }
+        */
+        NSArray *response = [self CR_getRootElement:rootElement withResponse:responseObject];
         
-        if ([responseObject isKindOfClass:[NSArray class]]) {
+        if ([response isKindOfClass:[NSArray class]]) {
             
-            NSArray *entities = [self CR_serializeAndSaveManyEntities:responseObject];
+            NSArray *entities = [self CR_serializeAndSaveManyEntities:response];
             
             if (completion) {
                 completion(self,YES,nil,entities);
@@ -420,14 +423,15 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
         urlString = [NSString stringWithFormat:@"%@",path];
     }
     
-    [self CR_getRemoteEntityAtPath:urlString parameters:params completion:completion];
+    [self CR_getRemoteEntityAtPath:urlString parameters:params rootResponseElement:[self CR_rootResponseElement] completion:completion];
     
 }
 
-+ (void) CR_getRemoteEntityAtPath:(NSString*)path parameters:(NSDictionary*)params completion:(CRRestCompletionBlock)completion
++ (void) CR_getRemoteEntityAtPath:(NSString*)path parameters:(NSDictionary*)params rootResponseElement:(NSString*)rootElement completion:(CRRestCompletionBlock)completion
 {
     [[NSManagedObject CR_HTTPSessionManager] GET:path parameters:params success:^(NSURLSessionDataTask *task, NSDictionary *responseObject) {
         
+        /*
         if ([self CR_rootResponseElement] && [responseObject isKindOfClass:[NSDictionary class]]) {
             NSDictionary *maybeResult = ((NSDictionary*)responseObject)[[self CR_rootResponseElement]];
 			
@@ -436,9 +440,12 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 			}
 			
         }
+        */
         
-        if ([responseObject isKindOfClass:[NSDictionary class]]) {
-            id entity = [self CR_serializeAndSaveOneEntity:responseObject];
+        NSDictionary *response = [self CR_getRootElement:rootElement withResponse:responseObject];
+        
+        if ([response isKindOfClass:[NSDictionary class]]) {
+            id entity = [self CR_serializeAndSaveOneEntity:response];
             
             if (completion) {
                 completion(self,YES,nil,entity);
@@ -501,6 +508,25 @@ static NSOperationQueue *_CRBackgroundOperationQueue;
 	}];
 }
 
++ (id) CR_getRootElement:(NSString*)rootElement withResponse:(NSDictionary*)response
+{
+    id result = response;
+    
+    if (!rootElement) {
+        rootElement = [self CR_rootResponseElement];
+    }
+    
+    if ([response isKindOfClass:[NSDictionary class]] && rootElement) {
+        @try {
+            result = response[rootElement];
+        }
+        @catch (NSException *exception) {
+            DDLogError(@"exception in response root element: %@",exception);
+        }
+    }
+    
+    return result;
+}
 
 + (void) logError:(NSError*)error request:(id)request path:(NSString*)path object:(id)object method:(NSString*)method
 {
